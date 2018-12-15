@@ -1,0 +1,9 @@
+extends ../layouts/common
+block content 
+  h1.form-group.text-center Create User
+  form(action="/users/create", method="POST").form-group
+    label(for="name") Name
+    input(name="name" type="text")#name.form-control
+    label(for="phone") Phone
+    input(name="phone" type="text")#phone.form-control
+    button.btn.btn-success Create

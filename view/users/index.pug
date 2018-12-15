@@ -1,0 +1,20 @@
+extends ../layouts/common
+block content
+  body
+    h1 Users 
+    .d-flex.align-item-center    
+      a(href="/users/create") Create
+      form(action="/users/search", method="GET").form-group.ml-auto.d-flex
+        input(type="text" name= 'q').form-control 
+        button.btn.btn-primary.ml-2 Search
+    table.table
+      tr
+        th Name
+        th Phone
+        th Action
+      each user in users
+        tr
+          td= user.name
+          td= user.phone  
+          td
+            a.btn.btn-light(href="/users/" + user.id) View
