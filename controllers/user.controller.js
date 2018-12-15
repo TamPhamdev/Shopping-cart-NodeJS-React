@@ -27,7 +27,21 @@ module.exports.create = (req, res) => {
 module.exports.postCreate = (req, res) => {
   // tạo shortid tự động khi thêm mới user
   req.body.id = shortid.generate();
+  let errors = [];
   // đẩy dữ liệu của req.body vào trong mảng và chuyển hướng về trang user  
+  if (!req.body.name) {
+    errors.push("Name is required !!!");
+  }
+  if (!req.body.phone) {
+    errors.push("Phone is required !!!");
+  }
+  if (errors.length) {
+    res.render("users/create", {
+      errors: errors,
+      values: req.body
+    });
+    return;
+  }
   db.get('users').push(req.body).write();
   res.redirect("/users");
 };
