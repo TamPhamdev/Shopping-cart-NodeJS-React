@@ -1,12 +1,14 @@
 // require module bên ngoài
-const express = require("express");
-const userRoute = require('./routes/user.route');
-const port = 3001;
+const express = require("express"); // khai báo express
+const port = 3001;  // khai báo port
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 
-const db = require('./db');
+const userRoute = require('./routes/user.route');
+const authRoute = require('./routes/auth.route');
+
+const authMiddleware = require('./middlewares/auth.middleware');
 const app = express();
-
 // view engine khai báo công cụ view, pug khai báo đuôi file để view
 app.set("view engine", "pug");
 // tham số đầu tiên là mặc định, tham số thứ 2 là đường dẫn folder
@@ -18,8 +20,8 @@ app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({
   extended: true
 }));
-
-app.use(express.static('public'));  
+app.use(cookieParser());
+app.use(express.static('public'));
 app.get("/", (req, res) =>
   // render nhận vào 2 tham số, tham số thứ 1 là path, tham số thứ 2 là object
   res.render("index", {
@@ -28,5 +30,6 @@ app.get("/", (req, res) =>
 );
 
 
-app.use('/users', userRoute);
+app.use('/users', authMiddleware.requireCookie, userRoute);
+app.use('/auth', authRoute);
 app.listen(port, () => console.log(`Hello World ! ${port}`));

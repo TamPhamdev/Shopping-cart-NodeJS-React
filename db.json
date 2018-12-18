@@ -1,37 +1,16 @@
 {
   "users": [
     {
-      "name": "Phạm Huỳnh Chí Tâm",
-      "id": "S-hmycgjI"
-    },
-    {
-      "name": "Khương",
-      "id": "bN1OWiwfg"
-    },
-    {
-      "name": "Anh Hai Ga",
-      "id": "7fvpq2dOp"
-    },
-    {
-      "name": "Anh Ba Heo",
-      "id": "EkptxMANM"
-    },
-    {
-      "name": [
-        "123123",
-        "123123"
-      ],
-      "id": "6Vs2-XJ3-"
-    },
-    {
-      "name": "123",
-      "phone": "321",
-      "id": "JdFs_YsaI"
-    },
-    {
       "name": "Ahihi",
-      "phone": "123456789",
-      "id": "-alzq1lz7"
+      "phone": "123",
+      "id": "feJgy45Qq"
+    },
+    {
+      "name": "Tam",
+      "phone": "123456",
+      "id": "oyWCb6qps",
+      "email": "tam@gmail.com",
+      "password": "d9b1d7db4cd6e70935368a1efb10e377"
     }
   ]
 }

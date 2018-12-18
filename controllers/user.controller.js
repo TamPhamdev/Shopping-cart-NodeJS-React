@@ -1,8 +1,8 @@
-const db = require('../db');
-const shortid = require('shortid');
+const db = require("../db");
+const shortid = require("shortid");
 module.exports.index = (req, res) => {
   res.render("users/index", {
-    users: db.get('users').value()
+    users: db.get("users").value()
   });
 };
 
@@ -12,11 +12,13 @@ module.exports.search = (req, res) => {
   // let userFilter = users.filter(
   //   user => user.name.toLowerCase().indexOf(q.toLowerCase()) !== -1
   // );
-  let userFilter = db.get('users').filter(
-    user => user.name.toLowerCase().indexOf(q.toLowerCase()) !== -1
-  ).value();
+  let userFilter = db
+    .get("users")
+    .filter(user => user.name.toLowerCase().indexOf(q.toLowerCase()) !== -1)
+    .value();
   res.render("users/index", {
-    users: userFilter
+    users: userFilter,
+    value: q
   });
 };
 
@@ -27,22 +29,9 @@ module.exports.create = (req, res) => {
 module.exports.postCreate = (req, res) => {
   // tạo shortid tự động khi thêm mới user
   req.body.id = shortid.generate();
-  let errors = [];
-  // đẩy dữ liệu của req.body vào trong mảng và chuyển hướng về trang user  
-  if (!req.body.name) {
-    errors.push("Name is required !!!");
-  }
-  if (!req.body.phone) {
-    errors.push("Phone is required !!!");
-  }
-  if (errors.length) {
-    res.render("users/create", {
-      errors: errors,
-      values: req.body
-    });
-    return;
-  }
-  db.get('users').push(req.body).write();
+  db.get("users")
+    .push(req.body)
+    .write();
   res.redirect("/users");
 };
 
@@ -51,10 +40,18 @@ module.exports.get = (req, res) => {
   // tham số id = req.params.id không phải query
   let id = req.params.id;
   // method find của module lowdb giống với array method
-  let user = db.get('users').find({
-    id: id
-  }).value(); // nhớ thêm .value() để lại giá trị => không có thì undefinded
+  let user = db
+    .get("users")
+    .find({
+      id: id
+    })
+    .value(); // nhớ thêm .value() để lại giá trị => không có thì undefinded
   res.render("./users/viewdetail", {
     user: user
   });
+};
+// logout 
+module.exports.logout = (req, res) => {
+  res.clearCookie('userCookie');
+  res.redirect('../auth/login');
 };

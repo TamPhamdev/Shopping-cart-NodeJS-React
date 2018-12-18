@@ -5,7 +5,7 @@ block content
     .d-flex.align-item-center    
       a(href="/users/create") Create
       form(action="/users/search", method="GET").form-group.ml-auto.d-flex
-        input(type="text" name= 'q').form-control 
+        input(type="text" name="q" value=value).form-control 
         button.btn.btn-primary.ml-2 Search
     table.table
       tr
