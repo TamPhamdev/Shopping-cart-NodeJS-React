@@ -22,6 +22,7 @@ module.exports.search = (req, res) => {
   });
 };
 
+
 module.exports.create = (req, res) => {
   res.render("users/create");
 };

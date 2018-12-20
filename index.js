@@ -1,6 +1,6 @@
 // require module bên ngoài
 const express = require("express"); // khai báo express
-const port = 3001;  // khai báo port
+const port = 3001; // khai báo port
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 
@@ -20,7 +20,8 @@ app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({
   extended: true
 }));
-app.use(cookieParser());
+app.use(cookieParser('qwwkdj1kl2j31123'));
+// khai báo sử dụng file static
 app.use(express.static('public'));
 app.get("/", (req, res) =>
   // render nhận vào 2 tham số, tham số thứ 1 là path, tham số thứ 2 là object
@@ -32,4 +33,5 @@ app.get("/", (req, res) =>
 
 app.use('/users', authMiddleware.requireCookie, userRoute);
 app.use('/auth', authRoute);
+
 app.listen(port, () => console.log(`Hello World ! ${port}`));

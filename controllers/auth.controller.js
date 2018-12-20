@@ -1,6 +1,7 @@
 const db = require("../db");
 const md5 = require("md5");
 
+
 module.exports.login = (req, res) => {
   res.render("auth/login");
 };
@@ -31,7 +32,10 @@ module.exports.postLogin = (req, res) => {
     });
     return;
   }
-  res.cookie('userCookie', user.id);
-  res.redirect('/users');
+  res.cookie('userCookie', user.id, {
+    signed: true,
+    expires: new Date(Date.now() + 900000)
+  });
 
+  res.redirect('/users');
 };
