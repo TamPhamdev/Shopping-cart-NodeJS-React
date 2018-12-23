@@ -10,7 +10,7 @@ module.exports.authLogin = (req, res, next) => {
   // nếu mảng error có > render lại trang > truyền vào 1 thêm object nhận 2 giá trị là errors và value
   if (errors.length) {
     res.render("auth/login", {
-      errors: errors,
+      errors: errors
     });
     return;
   }

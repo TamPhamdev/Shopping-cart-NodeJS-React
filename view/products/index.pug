@@ -1,0 +1,59 @@
+html
+  head
+    link(rel="stylesheet" ,href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css")
+    link(rel="stylesheet", href="/css/style.css")
+  body
+    nav.navbar.navbar-expand-lg.navbar-light.bg-light
+      a.navbar-brand(href='/users')
+        img(src='../image/cat.svg', width='30', height='30', alt='')
+      #navbarSupportedContent.collapse.navbar-collapse
+        ul.navbar-nav.ml-auto
+          li.nav-item.active
+            a.nav-link(href='/products')
+              | Products 
+              span.sr-only (current)
+          li.nav-item
+            a.nav-link(href='/users') User
+          li.nav-item
+            a.nav-link(href='#') About
+          li.nav-item
+            if(user)
+              a.nav-link=user.name
+          li.nav-item
+            a.nav-link(href='/users/logout') Logout 
+    .container
+      .row
+        each product in products      
+          .card(style='width: 18rem;').mx-auto
+            img.card-img-top(src= product.image, alt='Card image cap')
+            .card-body
+              h5.card-title=product.name
+              p.card-text=product.description
+              a.btn.btn-primary(href='#') Add to cart
+      if pageCount > 1
+       ul.pagination
+        if page > 1
+         li
+          a(href='/products?page=1')  &laquo;
+        - var x = 1
+        if page > 5
+         - x = x + (page - 4)
+        if (x !== 1)
+           li.disabled
+              a(href='#') ...
+        - for (x; x <= pageCount; x++)
+           if( page == x)
+            li.active
+               span.sr_only
+                   = page
+           else
+             li
+               a(href= "/products?page="+x )
+                = x
+           if x == (page + 4)
+               li.disabled
+                a(href="#") ...
+                - break
+        if page != pageCount
+        li
+            a(href= "/products?page="+(Math.floor(pageCount)) ) &raquo;

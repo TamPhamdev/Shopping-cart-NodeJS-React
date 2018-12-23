@@ -1,3 +1,6 @@
+// khai báo biến môi trường
+require('dotenv').config();
+
 // require module bên ngoài
 const express = require("express"); // khai báo express
 const port = 3001; // khai báo port
@@ -6,6 +9,7 @@ const cookieParser = require('cookie-parser');
 
 const userRoute = require('./routes/user.route');
 const authRoute = require('./routes/auth.route');
+const prodRoute = require('./routes/product.route');
 
 const authMiddleware = require('./middlewares/auth.middleware');
 const app = express();
@@ -20,7 +24,7 @@ app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({
   extended: true
 }));
-app.use(cookieParser('qwwkdj1kl2j31123'));
+app.use(cookieParser(process.env.SESSION_SECRET));
 // khai báo sử dụng file static
 app.use(express.static('public'));
 app.get("/", (req, res) =>
@@ -33,5 +37,5 @@ app.get("/", (req, res) =>
 
 app.use('/users', authMiddleware.requireCookie, userRoute);
 app.use('/auth', authRoute);
-
+app.use('/products', authMiddleware.requireCookie, prodRoute);
 app.listen(port, () => console.log(`Hello World ! ${port}`));

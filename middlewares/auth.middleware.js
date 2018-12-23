@@ -2,7 +2,6 @@ const db = require('../db');
 
 module.exports.requireCookie = (req, res, next) => {
   // userCookie tên của object mà set cookie (bên ath.controller.js)
-  console.log(req.cookies, req.signedCookies);
   if (!req.signedCookies.userCookie) {
     res.redirect('/auth/login');
     return;

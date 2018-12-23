@@ -11,7 +11,7 @@ router.get("/search", controller.search);
 router.get("/create", controller.create);
 router.post("/create", validate.postCreate, controller.postCreate);
 
-router.get("/logout", controller.logout );
+router.get("/logout", controller.logout);
 router.get("/:id", controller.get);
 
 module.exports = router; // nhớ exports ko lại bị lỗi
