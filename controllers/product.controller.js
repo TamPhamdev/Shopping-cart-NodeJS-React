@@ -9,6 +9,8 @@ module.exports.index = (req, res) => {
   let productList = db.get("products").value();
   let pageCount = Math.ceil(productList.length / perPage);
   let product = db.get("products").value().slice(start, end);
+
+
   res.render("products/index", {
     products: product,
     page: page,

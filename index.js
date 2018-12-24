@@ -6,6 +6,7 @@ const express = require("express"); // khai báo express
 const port = 3001; // khai báo port
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
+const multer  = require('multer');
 
 const userRoute = require('./routes/user.route');
 const authRoute = require('./routes/auth.route');
@@ -33,7 +34,6 @@ app.get("/", (req, res) =>
     name: "sss"
   })
 );
-
 
 app.use('/users', authMiddleware.requireCookie, userRoute);
 app.use('/auth', authRoute);

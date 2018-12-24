@@ -1,7 +1,6 @@
 const db = require("../db");
 const shortid = require("shortid");
 
-
 module.exports.index = (req, res) => {
   res.render("users/index", {
     users: db.get("users").value()
@@ -32,6 +31,8 @@ module.exports.create = (req, res) => {
 module.exports.postCreate = (req, res) => {
   // tạo shortid tự động khi thêm mới user
   req.body.id = shortid.generate();
+
+  req.body.avatar = req.file.path.split('\\').slice(1).join('\\');
   db.get("users")
     .push(req.body)
     .write();
@@ -47,8 +48,8 @@ module.exports.get = (req, res) => {
     .get("users")
     .find({
       id: id
-    })
-    .value(); // nhớ thêm .value() để lại giá trị => không có thì undefinded
+    }).value(); // nhớ thêm .value() để lại giá trị => không có thì undefinded
+
   res.render("./users/viewdetail", {
     user: user
   });
