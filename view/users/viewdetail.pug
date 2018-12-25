@@ -1,8 +1,16 @@
 extends ../layouts/common
 block content
-  h3 View Detail User
-  form
-    img(src= user.avatar, width="32")
-    span= user.name
-    span= user.phone
-    a(href="/users") Back
+  h3.text-center.mt-5 View Detail User
+   .container.mt-5
+    .row
+      .col-md-6.mx-auto
+        table.table
+          tr
+            th Avatar
+            th Name
+            th Phone
+          tr
+            td.align-middle
+              img(src="../" +user.avatar, width="64")
+            td.align-middle= user.name
+            td.align-middle= user.phone  
