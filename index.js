@@ -11,8 +11,11 @@ const multer = require("multer");
 const userRoute = require("./routes/user.route");
 const authRoute = require("./routes/auth.route");
 const prodRoute = require("./routes/product.route");
+const cartRoute = require("./routes/cart.route");
 
 const authMiddleware = require("./middlewares/auth.middleware");
+const sessionMiddleware = require("./middlewares/session.middleware");
+const cartMiddleware = require("./middlewares/cart.middleware");
 const app = express();
 // view engine khai báo công cụ view, pug khai báo đuôi file để view
 app.set("view engine", "pug");
@@ -22,22 +25,23 @@ app.set("views", "./view");
 // 1 là đường dẫn (path)
 // 2 là 1 callback function -> callback nhận 2 tham số : 1 là request từ client, 2 là response từ server trả về
 app.use(bodyParser.json()); // for parsing application/json
-app.use(
-  bodyParser.urlencoded({
-    extended: true
-  })
-);
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
 app.use(cookieParser(process.env.SESSION_SECRET));
-// khai báo sử dụng file static
-app.use(express.static("public"));
+app.use(express.static("public")); // khai báo sử dụng file static
+app.use(sessionMiddleware);
+app.use(cartMiddleware);
+// render nhận vào 2 tham số, tham số thứ 1 là path, tham số thứ 2 là object
 app.get("/", (req, res) =>
-  // render nhận vào 2 tham số, tham số thứ 1 là path, tham số thứ 2 là object
   res.render("index", {
     name: "sss"
   })
 );
-
+//thứ tự khai báo middleware tron Express rất quan trọng
 app.use("/users", authMiddleware.requireCookie, userRoute);
 app.use("/auth", authRoute);
 app.use("/products", authMiddleware.requireCookie, prodRoute);
+app.use("/cart", cartRoute);
+
 app.listen(port, () => console.log(`Hello World ! ${port}`));

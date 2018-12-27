@@ -15,7 +15,8 @@ html
           li.nav-item
             a.nav-link(href='/users') User
           li.nav-item
-            a.nav-link(href='#') About
+            a.nav-link(href='/cart') Cart
+            span.badge.badge-light=product 
           li.nav-item
             if(user)
               a.nav-link=user.name
@@ -29,7 +30,7 @@ html
             .card-body
               h5.card-title=product.name
               p.card-text=product.description
-              a.btn.btn-primary(href='#') Add to cart
+              a.btn.btn-primary(href='/cart/add/'+product.id) Add to cart
       if pageCount > 1
        ul.pagination
         if page > 1
