@@ -1,13 +1,14 @@
 // khai báo biến môi trường
 require("dotenv").config();
 
-// require module bên ngoài
+// require module 
 const express = require("express"); // khai báo express
 const port = 3001; // khai báo port
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
-const multer = require("multer");
+const mongoose = require("mongoose");
 
+mongoose.connect(process.env.MONGO_URL);
 const userRoute = require("./routes/user.route");
 const authRoute = require("./routes/auth.route");
 const prodRoute = require("./routes/product.route");
