@@ -12,11 +12,12 @@ module.exports = (req, res, next) => {
     })
     .value();
 
-  let total = Object.values(displayProduct.cart).reduce((a, b) => {
-    return a + b;
+  let total = Object.values(displayProduct.cart);
+  let totol1 =  total.reduce((a, b) => {
+    return a + b;  
   });
 
 
-  res.locals.product = total;
+  res.locals.product = totol1;
   next();
 };
