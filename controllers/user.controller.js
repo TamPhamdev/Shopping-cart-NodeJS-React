@@ -1,6 +1,5 @@
 const User = require("../models/user.model");
-
-//const shortid = require("shortid");
+const mongoose = require("mongoose");
 
 module.exports.index = async (req, res) => {
   let users = await User.find();
@@ -47,21 +46,26 @@ module.exports.search = async (req, res) => {
 //   res.redirect("/users");
 // };
 
-// // module view detail
-// module.exports.get = (req, res) => {
-//   // tham số id = req.params.id không phải query
-//   let id = req.params.id;
-//   // method find của module lowdb giống với array method
-//   let user = db
-//     .get("users")
-//     .find({
-//       id: id
-//     }).value(); // nhớ thêm .value() để lại giá trị => không có thì undefinded
-
-//   res.render("./users/viewdetail", {
-//     user: user
-//   });
-// };
+// module view detail
+module.exports.get = async (req, res) => {
+  // tham số id = req.params.id không phải query
+  let id = req.params.id;
+  // method find của module lowdb giống với array method
+  // let user = db
+  //   .get("users")
+  //   .find({
+  //     id: id
+  //   }).value(); // nhớ thêm .value() để lại giá trị => không có thì undefinded
+  //   let user = await User.findById({id});
+  //   res.render("./users/viewdetail", {
+  //     user: user
+  //   });
+  // };
+  let user = await User.findById(id);
+      res.render("./users/viewdetail", {
+        user: user
+      });
+};
 // // logout 
 // module.exports.logout = (req, res) => {
 //   res.clearCookie('userCookie');

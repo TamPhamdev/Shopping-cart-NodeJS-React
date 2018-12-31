@@ -22,6 +22,6 @@ router.get("/search", controller.search);
 //   controller.postCreate);
 
 // router.get("/logout", controller.logout);
-// router.get("/:id", controller.get);
+router.get("/:id", controller.get);
 
 module.exports = router; // nhớ exports ko lại bị lỗi

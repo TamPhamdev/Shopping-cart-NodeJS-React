@@ -6,7 +6,8 @@ const express = require("express"); // khai báo express
 const port = 3001; // khai báo port
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
-const mongoose = require("mongoose");
+const mongoose = require("mongoose").set('debug', true);
+
 
 
 mongoose.set('useCreateIndex', true);
