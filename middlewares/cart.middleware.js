@@ -11,13 +11,13 @@ module.exports = (req, res, next) => {
       id: sessionId
     })
     .value();
+// TODO:thêm tính tổng giỏ hàng
+  // let total = Object.values(displayProduct.cart);
+  // let totol1 =  total.reduce((a, b) => {
+  //   return a + b;  
+  // });
 
-  let total = Object.values(displayProduct.cart);
-  let totol1 =  total.reduce((a, b) => {
-    return a + b;  
-  });
 
-
-  res.locals.product = totol1;
+  // res.locals.product = totol1;
   next();
 };

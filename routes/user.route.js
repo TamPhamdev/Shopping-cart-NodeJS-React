@@ -14,14 +14,14 @@ router.get("/", authMiddleware.requireCookie, controller.index);
 // query search 
 router.get("/search", controller.search);
 
-router.get("/create", controller.create);
+// router.get("/create", controller.create);
 
-router.post("/create",
-  upload.single('avatar'),
-  validate.postCreate,
-  controller.postCreate);
+// router.post("/create",
+//   upload.single('avatar'),
+//   validate.postCreate,
+//   controller.postCreate);
 
-router.get("/logout", controller.logout);
-router.get("/:id", controller.get);
+// router.get("/logout", controller.logout);
+// router.get("/:id", controller.get);
 
 module.exports = router; // nhớ exports ko lại bị lỗi

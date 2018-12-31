@@ -9,13 +9,6 @@ module.exports.index = async (req, res) => {
   let pageCount = Math.ceil(products.length / perPage);
   let product = products.slice(start, end);
 
-  // res.render("products/index", {
-  //   products: product,
-  //   page: page,
-  //   perPage: perPage,
-  //   pageCount: pageCount
-  // });
-
   res.render("products/index", {
     products: product,
     page: page,
