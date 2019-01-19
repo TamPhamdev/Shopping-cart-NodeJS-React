@@ -16,8 +16,7 @@ html
             a.nav-link(href='/users') User
           li.nav-item
             a.nav-link(href='/cart') Cart
-            span.badge.badge-light=product 
-          li.nav-item
+              span.badge.badge-secondary=session.cart.totalQty   
             if(user)
               a.nav-link=user.name
           li.nav-item

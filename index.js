@@ -2,12 +2,14 @@
 require("dotenv").config();
 
 // require module 
-const express = require("express"); // khai báo express
+const express = require("express"); 
 const port = 3001; // khai báo port
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose").set('debug', true);
 const cloudinary = require('cloudinary');
+const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
   api_key: process.env.APP_KEY,
@@ -23,7 +25,7 @@ const cartRoute = require("./routes/cart.route");
 
 const authMiddleware = require("./middlewares/auth.middleware");
 const sessionMiddleware = require("./middlewares/session.middleware");
-const cartMiddleware = require("./middlewares/cart.middleware");
+//const cartMiddleware = require("./middlewares/cart.middleware");
 const app = express();
 // view engine khai báo công cụ view, pug khai báo đuôi file để view
 app.set("view engine", "pug");
@@ -38,8 +40,20 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(cookieParser(process.env.SESSION_SECRET));
 app.use(express.static("public")); // khai báo sử dụng file static
-app.use(sessionMiddleware);
-app.use(cartMiddleware);
+//app.use(sessionMiddleware);
+app.use(session({
+  secret:'secretcat',
+  resave:false,
+  saveUninitialized:false,
+  store: new MongoStore({url:'mongodb://localhost/express-demo',autoRemove: 'interval',
+  autoRemoveInterval: 20}),
+  cookie:{maxAge:180*60*1000}
+}));
+app.use(function(req, res, next ){
+  res.locals.session = req.session;
+  next();
+});
+//TODO:tí fix middleware cart app.use(cartMiddleware);
 // render nhận vào 2 tham số, tham số thứ 1 là path, tham số thứ 2 là object
 app.get("/", (req, res) =>
   res.render("index", {

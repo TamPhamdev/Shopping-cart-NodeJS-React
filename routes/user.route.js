@@ -29,7 +29,7 @@ router.post("/create",
   controller.postCreate);
 
 
-// router.get("/logout", controller.logout);
+ router.get("/logout", controller.logout);
 router.get("/:id", controller.get);
 
 module.exports = router; // nhớ exports ko lại bị lỗi

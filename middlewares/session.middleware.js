@@ -1,17 +1,23 @@
 const shortid = require("shortid");
-const db = require("../db");
-const User = require('../models/user.model');
+const Session = require('../models/session.model');
+module.exports = async (req, res, next) => {
 
-module.exports = (req, res, next) => {
-  let sessionId = shortid.generate();
- //TODO: làm lại session không dùng lowdb
+    let sessionId = shortid.generate();
+
+
   if (!req.signedCookies.sessionId) {
     res.cookie('sessionId', sessionId, {
       signed: true
     });
-    db.get('sessions').push({
-      id: sessionId
-    }).write();
+   
+    let session = new Session({
+      sessionId: sessionId
+    });
+    await session.save((error, results) => {
+      if (error) {
+        console.log(error);
+      }
+    });
   }
   next();
 };
