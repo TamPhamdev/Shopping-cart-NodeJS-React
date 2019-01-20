@@ -1,0 +1,38 @@
+extends ../layouts/common
+block content
+  body
+    if(products)
+      .container
+        .row
+          .col-md-12
+            table.table.table-bordered
+              thead
+                tr
+                  th.product-cart-center(scope='col')
+                  th.product-cart-center(scope='col')
+                  th.product-cart-center.product-title(scope='col') Product
+                  th.product-cart-center.product-title(scope='col') Price
+                  th.product-cart-center.product-title(scope='col') Quantity
+                  th.product-cart-center.product-title(scope='col') Total
+              tbody
+              each product in products
+                tr.text-center
+                  th.product-cart-center.product-remove(scope='row')
+                    a.remove(href='') X
+                  td
+                    img(src=product.item.image, width="100", height="100")
+                  td=product.item.name
+                  td #{product.item.price}$
+                  td.product-cart-center
+                    input.cart-quantity(type='number', min='1', value='1', step='1')
+                  td.product-cart-center.product-price  #{product.price}$
+        .row
+          .col-md-8.mx-auto
+              strong Total #{totalPrice}  
+        .row
+          .col-md-8.mx-auto
+            button.btn.btn-success Checkout
+    else    
+      .row
+        .col-md-8.mx-auto
+          h2 No item in cart

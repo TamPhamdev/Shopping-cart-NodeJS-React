@@ -33,5 +33,21 @@ router.get("/add/:productId", async function (req, res, next) {
   } catch (error) {
     res.status(500);
   }
-})
+});
+
+router.get('/shoppingCart', async function (req, res, next){
+ try {
+
+   if(!req.session.cart) {
+     return res.render('./cart/shoppingCart', {products: null});
+  }
+  let cart = await new Cart(req.session.cart);
+      await res.render('./cart/shoppingCart', 
+              {products: cart.generateArray(), 
+              totalPrice: cart.totalPrice});
+ }
+ catch(error) {
+  console.log(error);
+ }
+});
 module.exports = router;
