@@ -1,0 +1,33 @@
+extends ../layouts/common
+block script
+  script(src='../../public/js/checkout.js')
+  script(src="//checkout.stripe.com/v2/checkout.js",data-key=keyPublishable)
+block content 
+  .container
+    .row
+      .col-md-6.mx-auto
+        h3 Checkout
+        h4 Bill total: #{total} $
+        form(action='/cart/checkout', method='POST', id='checkout-form').text-left
+          .form-group
+            label(for='firstname')   Name 
+            input(type='text',id="name", required='').form-control
+          .form-group  
+            label(for='address')  Address 
+            input(type='text',id='address', required='').form-control
+          .form-group
+            label(for='cart-name') Card holder Name
+            input(type='text',id='cart-name', required='').form-control
+          .form-group
+            label(for='card-number') Credit Card number
+            input(type='text', required='' pattern='[0-9]*',).form-control
+          .form-group
+            label(for='exp-month')  Expiration Month
+            input(type='text', pattern='[0-9]*', required='').form-control
+          .form-group
+            label(for='exp-year') Expiration Year 
+            input(type='text', required='', pattern='[0-9]*',).form-control
+          .form-group
+            label(for='cvc') CVC
+            input(type='text', required='' ,pattern='[0-9]*',).form-control
+          button(type='submit').btn.btn-success Buy Now  

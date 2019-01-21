@@ -2,7 +2,7 @@
 require("dotenv").config();
 
 // require module 
-const express = require("express"); 
+const express = require("express");
 const port = 3001; // khai báo port
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
@@ -10,6 +10,8 @@ const mongoose = require("mongoose").set('debug', true);
 const cloudinary = require('cloudinary');
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
+const keyPublishable = process.env.STRIPE_PUBLISHKEY;
+const stripe = require('stripe')(process.env.STRIPE_API_SSKEY);
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
   api_key: process.env.APP_KEY,
@@ -17,7 +19,9 @@ cloudinary.config({
 });
 
 
-mongoose.connect(process.env.MONGO_URL,{ useNewUrlParser: true });
+mongoose.connect(process.env.MONGO_URL, {
+  useNewUrlParser: true
+});
 const userRoute = require("./routes/user.route");
 const authRoute = require("./routes/auth.route");
 const prodRoute = require("./routes/product.route");
@@ -42,14 +46,18 @@ app.use(cookieParser(process.env.SESSION_SECRET));
 app.use(express.static("public")); // khai báo sử dụng file static
 //app.use(sessionMiddleware);
 app.use(session({
-  secret:'secretcat',
-  resave:false,
-  saveUninitialized:false,
-  store: new MongoStore({url:'mongodb://localhost/express-demo',autoRemove: 'interval',
-  autoRemoveInterval: 20}),
-  cookie:{maxAge:180*60*1000}
+  secret: 'secretcat',
+  resave: false,
+  saveUninitialized: false,
+  store: new MongoStore({
+    url: 'mongodb://localhost/express-demo'
+  }),
+  cookie: {
+    maxAge: 180 * 60 * 1000
+  }
 }));
-app.use(function(req, res, next ){
+app.use(function (req, res, next) {
+  keyPublishable,
   res.locals.session = req.session;
   next();
 });

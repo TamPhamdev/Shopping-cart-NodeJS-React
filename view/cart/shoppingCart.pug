@@ -24,14 +24,14 @@ block content
                   td=product.item.name
                   td #{product.item.price}$
                   td.product-cart-center
-                    input.cart-quantity(type='number', min='1', value='1', step='1')
+                    input.cart-quantity(type='number', min='1', value=product.qty, step='1')
                   td.product-cart-center.product-price  #{product.price}$
         .row
           .col-md-8.mx-auto
               strong Total #{totalPrice}  
         .row
           .col-md-8.mx-auto
-            button.btn.btn-success Checkout
+            a(href='./checkout').btn.btn-success Checkout
     else    
       .row
         .col-md-8.mx-auto
