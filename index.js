@@ -65,7 +65,7 @@ app.use(function (req, res, next) {
 // render nhận vào 2 tham số, tham số thứ 1 là path, tham số thứ 2 là object
 app.get("/", (req, res) =>
   res.render("index", {
-    name: "sss"
+    name: "Boss"
   })
 );
 //thứ tự khai báo middleware tron Express rất quan trọng
