@@ -15,7 +15,10 @@ var card = elements.create('card', {
 
 
 window.onload = function () {
+
+  const form = document.getElementById('checkout-form');
   card.mount('#card-element');
+
   card.addEventListener('change', function (event) {
     var displayError = document.getElementById('card-errors');
     if (!name || !address) {
@@ -30,15 +33,9 @@ window.onload = function () {
       displayError.textContent = '';
     }
   });
-  var form = document.getElementById('checkout-form');
+
   form.addEventListener('submit', function (event) {
     event.preventDefault();
-    // var name = document.getElementById('name').value;
-    //  var address = document.getElementById('address').value;
-    //  var email = document.getElementById('email').value;
-    // var cardNumber = document.getElementById('card-number').value;
-    // var expMonth = document.getElementById('card-exp-month').value;
-    // var expYear = document.getElementById('card-exp-year').value;
 
     stripe.createToken(card).then(function (result) {
       if (result.error) {
@@ -51,15 +48,8 @@ window.onload = function () {
       }
     });
   });
-  // if (result.error) {
-  //   // Inform the customer that there was an error.
-  //   var errorElement = document.getElementById('card-errors');
-  //   errorElement.textContent = result.error.message;
-  // } else {
-  // Send the token to your server.
-
-
 };
+
 
 function stripeTokenHandler(token) {
   // Insert the token ID into the form so it gets submitted to the server

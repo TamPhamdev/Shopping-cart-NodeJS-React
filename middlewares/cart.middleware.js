@@ -1,4 +1,4 @@
-const db = require('../db');
+const Session = require('../models/session.model');
 
 module.exports = (req, res, next) => {
   let sessionId = req.signedCookies.sessionId;
@@ -6,11 +6,7 @@ module.exports = (req, res, next) => {
     res.redirect('/product');
     return;
   }
-  let displayProduct = db.get('sessions')
-    .find({
-      id: sessionId
-    })
-    .value();
+  
 // TODO:thêm tính tổng giỏ hàng
 
   next();

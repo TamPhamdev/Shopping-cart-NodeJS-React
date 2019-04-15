@@ -5,7 +5,7 @@ block content
         .col-md-6.mx-auto
           h3 Checkout
           h4 Bill total: #{total} $
-          .hidden.error.alert.alert-danger.hidden#card-errors
+          //.hidden.error.alert.alert-danger.hidden#card-errors
           #card-errors(role='alert')
           form(action='/cart/checkout', method='POST', id='checkout-form').text-left
             label(for="card-element") Card
@@ -22,17 +22,6 @@ block content
             .form-group
               label(for='phone') Phone
               input(type='text',id="phone",name='phone', required='' pattern='[0-9]*',).form-control
-            //- .form-group
-            //-   label(for='card-exp-month')  Expiration Month
-            //-   input(type='text',id="card-exp-month", pattern='[0-9]*', required='').form-control
-            //- .form-group
-            //-   label(for='card-exp-year') Expiration Year 
-            //-   input(type='text',id="card-exp-year", required='', pattern='[0-9]*',).form-control
-            //- .form-group
-            //-   label(for='card-cvc') CVC
-            //-   input(type='text',id="card-cvc", required='' ,pattern='[0-9]*',).form-control
             button.btn.btn-success Buy Now
     script(src="https://js.stripe.com/v3/")
     script(src="/js/checkout.js")
-
-//- append  script          

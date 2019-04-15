@@ -10,7 +10,7 @@ module.exports.index = async (req, res) => {
 module.exports.search = async (req, res) => {
   // req.query là 1 object, nếu muốn lấy giá trị của q thì phải .q Ví dụ {q: 'th', age: 28}
   let q = req.query.q;
- 
+
   let userFilter = await User.find({
     name: {
       $regex: new RegExp(q),
@@ -36,13 +36,12 @@ module.exports.postCreate = async (req, res) => {
       phone: req.body.phone,
       avatar: result.secure_url
     });
- 
-    await user.save((error,results) => {
+
+    await user.save((error, results) => {
       console.log(result);
     });
     res.redirect("/users");
-  }
-  catch(error) {
+  } catch (error) {
     res.status(500);
   }
 };

@@ -1,13 +1,13 @@
 const Product = require("../models/product.model");
-const Order = require('../models/order.model');
+const Order = require("../models/order.model");
 const stripe = require("stripe")(process.env.STRIPE_API_SSKEY);
-const Cart = module.exports = function (oldCart) {
-  this.items =  oldCart.items || {};
-  this.totalQty =   oldCart.totalQty || 0;
-  this.totalPrice =  oldCart.totalPrice || 0;
+const Cart = (module.exports = function(oldCart) {
+  this.items = oldCart.items || {};
+  this.totalQty = oldCart.totalQty || 0;
+  this.totalPrice = oldCart.totalPrice || 0;
 
-  this.add =  function (item, id) {
-    let storedItem =  this.items[id];
+  this.add = function(item, id) {
+    let storedItem = this.items[id];
     if (!storedItem) {
       storedItem = this.items[id] = {
         item: item,
@@ -16,55 +16,88 @@ const Cart = module.exports = function (oldCart) {
       };
     }
     storedItem.qty++;
-    storedItem.price =  storedItem.item.price * storedItem.qty;
+    storedItem.price = storedItem.item.price * storedItem.qty;
     this.totalQty++;
-    this.totalPrice +=  storedItem.item.price;
+    this.totalPrice += storedItem.item.price;
   };
-
-  this.generateArray =  function () {
+  this.reduceByOne = function(id) {
+    this.items[id].qty--;
+    this.items[id].price -= this.items[id].item.price;
+    this.totalQty--;
+    this.totalPrice -= this.items[id].item.price;
+    if (this.items[id].qty <= 0) {
+      delete this.items[id];
+    }
+  };
+  this.removeItem = function(id) {
+    this.totalQty -= this.items[id].qty;
+    this.totalPrice -= this.items[id].price;
+    delete this.items[id];
+  };
+  this.generateArray = function() {
     let arr = [];
     for (var id in this.items) {
       arr.push(this.items[id]);
     }
     return arr;
   };
-};
+});
 module.exports.addToCart = async (req, res) => {
+  console.log("Session first", req.session.cart);
   try {
     let productId = await req.params.productId;
-
+  
     let cart = await new Cart(req.session.cart ? req.session.cart : {});
 
-    let product = await Product.findById(productId, function (err) {
+    let product = await Product.findById(productId, err => {
       if (err) {
         console.log(err);
       }
     });
-
     cart.add(product, product.id);
     req.session.cart = cart;
-    console.log(req.session.cart);
-    res.redirect("/products");
+    console.log("Session cart",req.session.cart);
+  return   res.status(200).send(req.session.cart);
   } catch (error) {
-    res.status(404);
+    console.log(error);
   }
 };
 
-module.exports.shoppingcart = async (req, res) => {
+module.exports.shoppingcart = (req, res) => {
   try {
     if (!req.session.cart) {
-      return res.render("./cart/shoppingCart", {
+      return res.json("/carts/", {
         products: null
       });
     }
-    let cart = await new Cart(req.session.cart);
-    await res.render("./cart/shoppingCart", {
+    let cart = new Cart(req.session.cart);
+
+    // res.render("./cart/shoppingCart", {
+    //   products: cart.generateArray(),
+    //   totalPrice: cart.totalPrice
+    // });
+    res.json("/carts/", {
       products: cart.generateArray(),
       totalPrice: cart.totalPrice
     });
   } catch (error) {
     console.log(error);
   }
+};
+module.exports.reduce = function(req, res, next) {
+  var productId = req.params.productId;
+  let cart = new Cart(req.session.cart);
+  cart.reduceByOne(productId);
+  req.session.cart = cart;
+  res.redirect("/cart/shoppingCart");
+};
+
+module.exports.remove = function(req, res, next) {
+  var productId = req.params.productId;
+  let cart = new Cart(req.session.cart);
+  cart.removeItem(productId);
+  req.session.cart = cart;
+  res.redirect("/cart/shoppingCart");
 };
 
 module.exports.checkout = async (req, res) => {
@@ -97,36 +130,39 @@ module.exports.postCharge = (req, res) => {
   const phone = req.body.phone;
   const token = req.body.stripeToken;
 
-  stripe.customers.create({
-    source: token,
-    email,
-    metadata: {
-      address,
-      name,
-      phone,
-    }
-  }).then(customer =>
-    stripe.charges.create({
-      amount,
-      customer: customer.id,
-      currency: "usd",
-      description: "Sample Charge"
-    })).then((charge, error) => {
-    if (error) {
-      console.log(error);
-    }
-    var order = new Order({
-    //  user:req.user,
-      cart:cart,
-      address:req.body.address,
-      name:req.body.name,
-      paymentId:charge.id
-    });
-    order.save(function(err,result){
-      req.session.cart = null;
-      res.redirect('../user');
-    });
-   
-    //TODO: save cart vô database & retrive customer từ Stripe
-  }).catch(err => console.log(err));
+  stripe.customers
+    .create({
+      source: token,
+      email,
+      metadata: {
+        address,
+        name,
+        phone
+      }
+    })
+    .then(customer =>
+      stripe.charges.create({
+        amount,
+        customer: customer.id,
+        currency: "usd",
+        description: "Sample Charge"
+      })
+    )
+    .then((charge, error) => {
+      if (error) {
+        console.log(error);
+      }
+      var order = new Order({
+        //  user:req.user,
+        cart: cart,
+        address: req.body.address,
+        name: req.body.name,
+        paymentId: charge.id
+      });
+      order.save(function(err, result) {
+        req.session.cart = null;
+        res.redirect("../users");
+      });
+    })
+    .catch(err => console.log(err));
 };

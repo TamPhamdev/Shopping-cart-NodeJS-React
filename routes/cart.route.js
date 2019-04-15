@@ -4,11 +4,15 @@ const router = express.Router();
 
 const controller = require('../controllers/cart.controller');
 
-router.get('/add/:productId', controller.addToCart);
+router.post('/add/:productId', controller.addToCart);
 
-router.get('/shoppingCart', controller.shoppingcart);
+router.get('/', controller.shoppingcart);
 
 router.get('/checkout', controller.checkout);
 
 router.post('/checkout', controller.postCharge);
+
+router.get('/reduce/:productId', controller.reduce);
+
+router.get('/remove/:productId', controller.remove);
 module.exports = router;

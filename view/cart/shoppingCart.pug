@@ -1,30 +1,37 @@
 extends ../layouts/common
 block content
   body
-    if(products)
-      .container
+    if(!products || products.length <= 0)    
         .row
+          .col-md-8.mx-auto
+            h2 No item in cart
+    else        
+      .container
+        form(action="/cart/shoppingCart", method="POST")#form-cart
+          .row
           .col-md-12
             table.table.table-bordered
               thead
                 tr
                   th.product-cart-center(scope='col')
                   th.product-cart-center(scope='col')
-                  th.product-cart-center.product-title(scope='col') Product
+                  th.product-cart-center.product-title(scope='col') Title
                   th.product-cart-center.product-title(scope='col') Price
                   th.product-cart-center.product-title(scope='col') Quantity
                   th.product-cart-center.product-title(scope='col') Total
               tbody
               each product in products
                 tr.text-center
-                  th.product-cart-center.product-remove(scope='row')
-                    a.remove(href='') X
+                  th(scope='row')
+                    a.remove(href='./remove/'+product.item._id) X
                   td
                     img(src=product.item.image, width="100", height="100")
-                  td=product.item.name
-                  td #{product.item.price}$
+                  td=product.item.name 
+                  td(name='product-price').cart-price #{product.item.price}$
                   td.product-cart-center
-                    input.cart-quantity(type='number', min='1', value=product.qty, step='1')
+                    a.btn.btn-primary(href='/cart/add/'+product.item._id) +
+                    input.cart-quantity(type='number', min='1', value=product.qty, step='1', name='product_qty')
+                    a.btn.btn-danger(href='./reduce/'+product.item._id) -
                   td.product-cart-center.product-price  #{product.price}$
         .row
           .col-md-8.mx-auto
@@ -32,7 +39,5 @@ block content
         .row
           .col-md-8.mx-auto
             a(href='./checkout').btn.btn-success Checkout
-    else    
-      .row
-        .col-md-8.mx-auto
-          h2 No item in cart
+  script(src="http://code.jquery.com/jquery-3.1.0.min.js")
+  script(src='/js/ajax.js')      
